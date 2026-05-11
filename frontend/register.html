@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ฟอร์มสมัครสอบบุคลากร | โรงเรียนสาธิต มข. หนองคาย</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-800 text-white shadow">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
+      <a href="index.html" class="text-blue-200 hover:text-white text-sm">← กลับหน้าหลัก</a>
+      <span class="text-blue-300">|</span>
+      <h1 class="text-base font-bold">ฟอร์มสมัครสอบบุคลากร</h1>
+    </div>
+  </nav>
+
+  <!-- Form Container -->
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+
+      <!-- Form Header -->
+      <div class="bg-blue-700 text-white px-8 py-6">
+        <h2 class="text-2xl font-bold">ใบสมัครสอบคัดเลือกบุคลากร</h2>
+        <p class="text-blue-200 text-sm mt-1">โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น วิทยาเขตหนองคาย</p>
+      </div>
+
+      <!-- Alert -->
+      <div id="alertBox" class="hidden px-8 py-4"></div>
+
+      <!-- Form -->
+      <form id="registerForm" class="px-8 py-6 space-y-6">
+
+        <!-- Section 1: ข้อมูลส่วนตัว -->
+        <div>
+          <h3 class="text-lg font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-4">
+            1. ข้อมูลส่วนตัว
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">คำนำหน้า <span class="text-red-500">*</span></label>
+              <select name="prefix" required
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="">-- เลือก --</option>
+                <option>นาย</option>
+                <option>นาง</option>
+                <option>นางสาว</option>
+                <option>ดร.</option>
+                <option>ผศ.ดร.</option>
+                <option>รศ.ดร.</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ <span class="text-red-500">*</span></label>
+              <input type="text" name="firstName" required placeholder="ชื่อ"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">นามสกุล <span class="text-red-500">*</span></label>
+              <input type="text" name="lastName" required placeholder="นามสกุล"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">เลขบัตรประชาชน <span class="text-red-500">*</span></label>
+              <input type="text" name="idCard" required placeholder="0-0000-00000-00-0" maxlength="13"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
+              <input type="tel" name="phone" required placeholder="0xx-xxx-xxxx"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล <span class="text-red-500">*</span></label>
+              <input type="email" name="email" required placeholder="email@example.com"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: ตำแหน่งที่สมัคร -->
+        <div>
+          <h3 class="text-lg font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-4">
+            2. ตำแหน่งที่สมัคร
+          </h3>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">สาขาวิชา / ตำแหน่ง <span class="text-red-500">*</span></label>
+            <select name="subject" required
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <option value="">-- เลือกสาขา --</option>
+              <option>ครูคณิตศาสตร์</option>
+              <option>ครูวิทยาศาสตร์</option>
+              <option>ครูภาษาไทย</option>
+              <option>ครูภาษาอังกฤษ</option>
+              <option>ครูสังคมศึกษา</option>
+              <option>ครูพลศึกษา</option>
+              <option>ครูศิลปะ</option>
+              <option>ครูดนตรี</option>
+              <option>ครูคอมพิวเตอร์</option>
+              <option>เจ้าหน้าที่ธุรการ</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 3: ประวัติการศึกษา -->
+        <div>
+          <h3 class="text-lg font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-4">
+            3. ประวัติการศึกษาและประสบการณ์
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">วุฒิการศึกษาสูงสุด (สาขา, สถาบัน, ปีที่จบ) <span class="text-red-500">*</span></label>
+              <textarea name="education" required rows="3" placeholder="เช่น วท.บ. วิทยาการคอมพิวเตอร์ มหาวิทยาลัยขอนแก่น 2563"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">ประสบการณ์การทำงาน</label>
+              <textarea name="experience" rows="3" placeholder="ระบุประสบการณ์ที่เกี่ยวข้อง..."
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">ผลงานวิชาการ / รางวัล</label>
+              <textarea name="achievements" rows="3" placeholder="ผลงานวิชาการ, รางวัลที่เคยได้รับ..."
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">นวัตกรรม / สิ่งประดิษฐ์</label>
+              <textarea name="innovations" rows="3" placeholder="นวัตกรรมหรือสิ่งประดิษฐ์ที่เคยสร้าง..."
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: อัปโหลดเอกสาร -->
+        <div>
+          <h3 class="text-lg font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-4">
+            4. เอกสารประกอบการสมัคร
+          </h3>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              อัปโหลดไฟล์เอกสารหลักฐาน <span class="text-red-500">*</span>
+              <span class="text-gray-400 font-normal ml-1">(PDF หรือ JPG ขนาดไม่เกิน 10 MB)</span>
+            </label>
+            <input type="file" id="docFile" accept=".pdf,.jpg,.jpeg" required
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-4 border-t border-gray-200">
+          <button type="submit" id="submitBtn"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition text-lg">
+            ส่งใบสมัคร
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL'; // <-- ใส่ URL ของ Web App
+
+    function showAlert(message, type) {
+      const box = document.getElementById('alertBox');
+      box.className = 'px-8 py-4 text-center font-semibold ' +
+        (type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800');
+      box.textContent = message;
+      box.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'กำลังส่งข้อมูล...';
+
+      try {
+        const formData = new FormData(this);
+        const payload = {};
+        formData.forEach((v, k) => { payload[k] = v; });
+
+        const fileInput = document.getElementById('docFile');
+        if (fileInput.files[0]) {
+          const base64 = await fileToBase64(fileInput.files[0]);
+          payload.fileBase64 = base64;
+          payload.fileName = fileInput.files[0].name;
+          payload.fileType = fileInput.files[0].type;
+        }
+
+        payload.action = 'register';
+
+        const res = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (result.status === 'success') {
+          showAlert('✅ ส่งใบสมัครสำเร็จ! รหัสใบสมัครของคุณคือ: ' + result.appId, 'success');
+          this.reset();
+        } else {
+          showAlert('❌ ' + (result.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่'), 'error');
+        }
+      } catch (err) {
+        showAlert('❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'ส่งใบสมัคร';
+      }
+    });
+  </script>
+</body>
+</html>
