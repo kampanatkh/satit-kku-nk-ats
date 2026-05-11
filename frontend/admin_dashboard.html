@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | ระบบรับสมัครสอบบุคลากร</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Login Screen -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-3">🔐</div>
+        <h2 class="text-2xl font-bold text-gray-800">เข้าสู่ระบบ Admin</h2>
+        <p class="text-gray-500 text-sm mt-1">ระบบรับสมัครสอบบุคลากร</p>
+      </div>
+      <div id="loginAlert" class="hidden mb-4 bg-red-100 text-red-700 px-4 py-2 rounded-lg text-sm"></div>
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้</label>
+          <input type="text" id="username" required placeholder="Username"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+          <input type="password" id="password" required placeholder="Password"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+        <button type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition">
+          เข้าสู่ระบบ
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard Screen (hidden until login) -->
+  <div id="dashboardScreen" class="hidden">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-800 text-white shadow-lg sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">📊</span>
+          <h1 class="text-lg font-bold">Admin Dashboard — ระบบรับสมัครสอบ</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="adminName" class="text-blue-200 text-sm"></span>
+          <button onclick="logout()"
+            class="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm transition">
+            ออกจากระบบ
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Stats Bar -->
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl shadow p-4 text-center">
+          <div class="text-3xl font-bold text-blue-600" id="statTotal">0</div>
+          <div class="text-gray-500 text-sm mt-1">ผู้สมัครทั้งหมด</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4 text-center">
+          <div class="text-3xl font-bold text-yellow-500" id="statPending">0</div>
+          <div class="text-gray-500 text-sm mt-1">รอดำเนินการ</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4 text-center">
+          <div class="text-3xl font-bold text-green-600" id="statApproved">0</div>
+          <div class="text-gray-500 text-sm mt-1">อนุมัติแล้ว</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4 text-center">
+          <div class="text-3xl font-bold text-red-500" id="statRejected">0</div>
+          <div class="text-gray-500 text-sm mt-1">ไม่ผ่าน</div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="bg-white rounded-xl shadow p-4 mb-4 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex items-center gap-3 flex-wrap">
+          <select id="filterSubject" onchange="loadApplicants()"
+            class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <option value="">ทุกสาขา</option>
+            <option>ครูคณิตศาสตร์</option>
+            <option>ครูวิทยาศาสตร์</option>
+            <option>ครูภาษาไทย</option>
+            <option>ครูภาษาอังกฤษ</option>
+            <option>ครูสังคมศึกษา</option>
+            <option>ครูพลศึกษา</option>
+            <option>ครูศิลปะ</option>
+            <option>ครูดนตรี</option>
+            <option>ครูคอมพิวเตอร์</option>
+            <option>เจ้าหน้าที่ธุรการ</option>
+          </select>
+          <input type="text" id="searchInput" placeholder="ค้นหาชื่อ/รหัส..." oninput="filterTable()"
+            class="border border-gray-300 rounded-lg px-3 py-2 text-sm w-48 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <button onclick="loadApplicants()"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
+            🔄 รีเฟรช
+          </button>
+        </div>
+        <button onclick="exportToExcel()"
+          class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition flex items-center gap-2">
+          📥 Export Excel
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-white rounded-xl shadow overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-blue-700 text-white">
+              <tr>
+                <th class="px-4 py-3 text-left">รหัส</th>
+                <th class="px-4 py-3 text-left">ชื่อ-นามสกุล</th>
+                <th class="px-4 py-3 text-left">สาขา</th>
+                <th class="px-4 py-3 text-left">โทร</th>
+                <th class="px-4 py-3 text-left">อีเมล</th>
+                <th class="px-4 py-3 text-left">เอกสาร</th>
+                <th class="px-4 py-3 text-left">สถานะ</th>
+                <th class="px-4 py-3 text-left">ห้องสอบ</th>
+                <th class="px-4 py-3 text-center">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="applicantTableBody">
+              <tr>
+                <td colspan="9" class="text-center py-8 text-gray-400">กำลังโหลด...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-screen overflow-y-auto">
+      <div class="flex justify-between items-center p-6 border-b">
+        <h3 class="text-xl font-bold text-gray-800">รายละเอียดผู้สมัคร</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+      </div>
+      <div id="modalContent" class="p-6"></div>
+      <div class="p-6 border-t flex flex-wrap gap-3">
+        <select id="modalStatus" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+          <option>รอดำเนินการ</option>
+          <option>อนุมัติ</option>
+          <option>ไม่ผ่าน</option>
+          <option>ส่งกลับแก้ไข</option>
+        </select>
+        <input type="text" id="modalExamRoom" placeholder="ห้องสอบ (เช่น ห้อง A101)"
+          class="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1" />
+        <button onclick="saveApplicantUpdate()"
+          class="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
+          บันทึก
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL'; // <-- ใส่ URL ของ Web App
+    let allApplicants = [];
+    let currentAppId = null;
+
+    // ===== Login =====
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      try {
+        const res = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'adminLogin', username, password })
+        });
+        const result = await res.json();
+        if (result.status === 'success') {
+          document.getElementById('loginScreen').classList.add('hidden');
+          document.getElementById('dashboardScreen').classList.remove('hidden');
+          document.getElementById('adminName').textContent = result.username + ' (' + result.role + ')';
+          loadApplicants();
+        } else {
+          const alert = document.getElementById('loginAlert');
+          alert.textContent = result.message || 'เข้าสู่ระบบไม่สำเร็จ';
+          alert.classList.remove('hidden');
+        }
+      } catch (err) {
+        document.getElementById('loginAlert').textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+        document.getElementById('loginAlert').classList.remove('hidden');
+      }
+    });
+
+    function logout() {
+      document.getElementById('dashboardScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('loginForm').reset();
+    }
+
+    // ===== Load Applicants =====
+    async function loadApplicants() {
+      const subject = document.getElementById('filterSubject').value;
+      const url = GAS_URL + '?action=getApplicants' + (subject ? '&subject=' + encodeURIComponent(subject) : '');
+      try {
+        const res = await fetch(url);
+        const result = await res.json();
+        if (result.status === 'success') {
+          allApplicants = result.data;
+          renderTable(allApplicants);
+          updateStats(allApplicants);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('applicantTableBody');
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-gray-400">ไม่พบข้อมูล</td></tr>';
+        return;
+      }
+      const statusColors = {
+        'รอดำเนินการ': 'bg-yellow-100 text-yellow-800',
+        'อนุมัติ': 'bg-green-100 text-green-800',
+        'ไม่ผ่าน': 'bg-red-100 text-red-800',
+        'ส่งกลับแก้ไข': 'bg-purple-100 text-purple-800'
+      };
+      tbody.innerHTML = data.map((row, i) => {
+        const statusClass = statusColors[row['สถานะ']] || 'bg-gray-100 text-gray-800';
+        const fileLink = row['ไฟล์เอกสาร'] ? `<a href="${row['ไฟล์เอกสาร']}" target="_blank" class="text-blue-600 hover:underline">ดูไฟล์</a>` : '-';
+        return `<tr class="${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition">
+          <td class="px-4 py-3 font-mono text-xs">${row['รหัสใบสมัคร'] || ''}</td>
+          <td class="px-4 py-3">${row['คำนำหน้า'] || ''}${row['ชื่อ'] || ''} ${row['นามสกุล'] || ''}</td>
+          <td class="px-4 py-3 text-xs">${row['สาขา'] || ''}</td>
+          <td class="px-4 py-3 text-xs">${row['โทรศัพท์'] || ''}</td>
+          <td class="px-4 py-3 text-xs">${row['อีเมล'] || ''}</td>
+          <td class="px-4 py-3 text-center">${fileLink}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${row['สถานะ'] || ''}</span></td>
+          <td class="px-4 py-3 text-xs">${row['ห้องสอบ'] || '-'}</td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="openDetail('${row['รหัสใบสมัคร']}')"
+              class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition">
+              ดูเพิ่มเติม
+            </button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function filterTable() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allApplicants.filter(r =>
+        (r['ชื่อ'] + ' ' + r['นามสกุล'] + ' ' + r['รหัสใบสมัคร']).toLowerCase().includes(q)
+      );
+      renderTable(filtered);
+    }
+
+    function updateStats(data) {
+      document.getElementById('statTotal').textContent = data.length;
+      document.getElementById('statPending').textContent = data.filter(r => r['สถานะ'] === 'รอดำเนินการ').length;
+      document.getElementById('statApproved').textContent = data.filter(r => r['สถานะ'] === 'อนุมัติ').length;
+      document.getElementById('statRejected').textContent = data.filter(r => r['สถานะ'] === 'ไม่ผ่าน').length;
+    }
+
+    // ===== Detail Modal =====
+    function openDetail(appId) {
+      currentAppId = appId;
+      const row = allApplicants.find(r => r['รหัสใบสมัคร'] === appId);
+      if (!row) return;
+      document.getElementById('modalContent').innerHTML = `
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div><span class="font-medium text-gray-600">รหัสใบสมัคร:</span> <span>${row['รหัสใบสมัคร']}</span></div>
+          <div><span class="font-medium text-gray-600">วันที่สมัคร:</span> <span>${new Date(row['วันที่สมัคร']).toLocaleString('th-TH')}</span></div>
+          <div><span class="font-medium text-gray-600">ชื่อ-นามสกุล:</span> <span>${row['คำนำหน้า']}${row['ชื่อ']} ${row['นามสกุล']}</span></div>
+          <div><span class="font-medium text-gray-600">เลขบัตรประชาชน:</span> <span>${row['เลขบัตรประชาชน']}</span></div>
+          <div><span class="font-medium text-gray-600">โทรศัพท์:</span> <span>${row['โทรศัพท์']}</span></div>
+          <div><span class="font-medium text-gray-600">อีเมล:</span> <span>${row['อีเมล']}</span></div>
+          <div class="col-span-2"><span class="font-medium text-gray-600">สาขา:</span> <span>${row['สาขา']}</span></div>
+          <div class="col-span-2"><span class="font-medium text-gray-600">การศึกษา:</span> <p class="text-gray-700 mt-1">${row['การศึกษา']}</p></div>
+          <div class="col-span-2"><span class="font-medium text-gray-600">ประสบการณ์:</span> <p class="text-gray-700 mt-1">${row['ประสบการณ์'] || '-'}</p></div>
+          <div class="col-span-2"><span class="font-medium text-gray-600">ผลงาน:</span> <p class="text-gray-700 mt-1">${row['ผลงาน'] || '-'}</p></div>
+          <div class="col-span-2"><span class="font-medium text-gray-600">เอกสาร:</span> ${row['ไฟล์เอกสาร'] ? '<a href="' + row['ไฟล์เอกสาร'] + '" target="_blank" class="text-blue-600 hover:underline">คลิกเพื่อดูไฟล์</a>' : 'ไม่มี'}</div>
+        </div>`;
+      document.getElementById('modalStatus').value = row['สถานะ'] || 'รอดำเนินการ';
+      document.getElementById('modalExamRoom').value = row['ห้องสอบ'] || '';
+      document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('detailModal').classList.add('hidden');
+      currentAppId = null;
+    }
+
+    async function saveApplicantUpdate() {
+      if (!currentAppId) return;
+      const status = document.getElementById('modalStatus').value;
+      const examRoom = document.getElementById('modalExamRoom').value;
+      try {
+        const res = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'updateStatus', appId: currentAppId, status, examRoom })
+        });
+        const result = await res.json();
+        if (result.status === 'success') {
+          closeModal();
+          loadApplicants();
+        } else {
+          alert('เกิดข้อผิดพลาด: ' + result.message);
+        }
+      } catch (err) {
+        alert('ไม่สามารถเชื่อมต่อได้');
+      }
+    }
+
+    // ===== Export to Excel =====
+    function exportToExcel() {
+      if (!allApplicants.length) { alert('ไม่มีข้อมูลให้ Export'); return; }
+      const ws = XLSX.utils.json_to_sheet(allApplicants);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Applicants');
+      XLSX.writeFile(wb, 'applicants_' + new Date().toISOString().slice(0,10) + '.xlsx');
+    }
+  </script>
+</body>
+</html>
