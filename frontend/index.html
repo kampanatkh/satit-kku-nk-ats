@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ระบบรับสมัครสอบบุคลากร | โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น วิทยาเขตหนองคาย</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-800 text-white shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://upload.wikimedia.org/wikipedia/th/thumb/d/d3/KKU-logo.png/120px-KKU-logo.png"
+             alt="Logo" class="h-10 w-10 rounded-full bg-white p-1" />
+        <div>
+          <h1 class="text-lg font-bold leading-tight">ระบบรับสมัครสอบบุคลากร</h1>
+          <p class="text-xs text-blue-200">โรงเรียนสาธิต มข. วิทยาเขตหนองคาย</p>
+        </div>
+      </div>
+      <a href="admin_login.html"
+         class="bg-white text-blue-800 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition">
+        เข้าสู่ระบบ (Admin)
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="bg-blue-700 text-white py-16 text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-3">ประกาศรับสมัครบุคลากร</h2>
+      <p class="text-blue-100 mb-6">ประจำปีการศึกษา 2567 — โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น วิทยาเขตหนองคาย</p>
+      <div id="registrationStatus" class="inline-block bg-white text-blue-800 px-6 py-2 rounded-full font-semibold text-sm">
+        กำลังตรวจสอบช่วงเวลา...
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Cards -->
+  <section class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-xl shadow p-6 text-center hover:shadow-lg transition">
+      <div class="text-4xl mb-3">📋</div>
+      <h3 class="text-lg font-bold text-gray-800 mb-2">สมัครสอบ</h3>
+      <p class="text-gray-500 text-sm mb-4">กรอกข้อมูลส่วนตัวและอัปโหลดเอกสาร</p>
+      <a href="register.html"
+         class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold">
+        สมัครเลย
+      </a>
+    </div>
+    <div class="bg-white rounded-xl shadow p-6 text-center hover:shadow-lg transition">
+      <div class="text-4xl mb-3">🔍</div>
+      <h3 class="text-lg font-bold text-gray-800 mb-2">ตรวจสอบสถานะ</h3>
+      <p class="text-gray-500 text-sm mb-4">ตรวจสอบสถานะการสมัครและผลการคัดเลือก</p>
+      <a href="applicant_dashboard.html"
+         class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-sm font-semibold">
+        ตรวจสอบ
+      </a>
+    </div>
+    <div class="bg-white rounded-xl shadow p-6 text-center hover:shadow-lg transition">
+      <div class="text-4xl mb-3">📢</div>
+      <h3 class="text-lg font-bold text-gray-800 mb-2">ประกาศและข่าวสาร</h3>
+      <p class="text-gray-500 text-sm mb-4">ติดตามข่าวสารและกำหนดการสอบ</p>
+      <a href="#announcements"
+         class="inline-block bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition text-sm font-semibold">
+        ดูประกาศ
+      </a>
+    </div>
+  </section>
+
+  <!-- Announcements -->
+  <section id="announcements" class="max-w-6xl mx-auto px-4 py-6 pb-16">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-blue-600 pl-4">ประกาศและข่าวสาร</h2>
+    <div class="space-y-4">
+      <div class="bg-white rounded-xl shadow p-5 flex items-start gap-4">
+        <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full mt-1 whitespace-nowrap">ล่าสุด</span>
+        <div>
+          <h4 class="font-semibold text-gray-800">ประกาศรับสมัครสอบคัดเลือกบุคลากรตำแหน่งครู</h4>
+          <p class="text-gray-500 text-sm mt-1">รับสมัครตำแหน่งครูผู้สอนในสาขาวิชาต่างๆ สมัครได้ตั้งแต่วันนี้จนถึงวันปิดรับสมัคร</p>
+          <p class="text-xs text-gray-400 mt-2">อัปเดต: 11 พฤษภาคม 2567</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl shadow p-5 flex items-start gap-4">
+        <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full mt-1 whitespace-nowrap">กำหนดการ</span>
+        <div>
+          <h4 class="font-semibold text-gray-800">กำหนดการสอบข้อเขียนและสัมภาษณ์</h4>
+          <p class="text-gray-500 text-sm mt-1">สอบข้อเขียน: ตามวันที่กำหนดในประกาศ | สัมภาษณ์: แจ้งให้ทราบภายหลัง</p>
+          <p class="text-xs text-gray-400 mt-2">อัปเดต: 11 พฤษภาคม 2567</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8 text-center text-sm">
+    <p class="text-gray-300">โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น วิทยาเขตหนองคาย</p>
+    <p class="text-gray-500 mt-1">© 2024 All rights reserved</p>
+  </footer>
+
+  <script>
+    // Check registration status from API
+    const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL'; // <-- ใส่ URL ของ Web App
+
+    async function checkRegistrationStatus() {
+      try {
+        const res = await fetch(GAS_URL + '?action=getSettings');
+        const json = await res.json();
+        if (json.status === 'success') {
+          const now = new Date();
+          const open = new Date(json.data.open_date);
+          const close = new Date(json.data.close_date);
+          const el = document.getElementById('registrationStatus');
+          if (now >= open && now <= close) {
+            el.className = 'inline-block bg-green-400 text-green-900 px-6 py-2 rounded-full font-semibold text-sm';
+            el.textContent = '🟢 เปิดรับสมัครแล้ว (ถึง ' + close.toLocaleDateString('th-TH') + ')';
+          } else if (now < open) {
+            el.className = 'inline-block bg-yellow-300 text-yellow-900 px-6 py-2 rounded-full font-semibold text-sm';
+            el.textContent = '🟡 จะเปิดรับสมัคร ' + open.toLocaleDateString('th-TH');
+          } else {
+            el.className = 'inline-block bg-red-400 text-white px-6 py-2 rounded-full font-semibold text-sm';
+            el.textContent = '🔴 ปิดรับสมัครแล้ว';
+          }
+        }
+      } catch (e) {
+        document.getElementById('registrationStatus').textContent = 'ไม่สามารถโหลดข้อมูลได้';
+      }
+    }
+    checkRegistrationStatus();
+  </script>
+</body>
+</html>
